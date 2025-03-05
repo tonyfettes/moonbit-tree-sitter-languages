@@ -1,0 +1,7 @@
+{
+  "name": "tonyfettes/tree_sitter_json",
+  "version": "0.1.0",
+  "deps": {
+    "tonyfettes/tree_sitter_language": "0.1.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "import": [
+    "tonyfettes/tree_sitter_language"
+  ],
+  "native_stub": [
+    "tree-sitter/src/parser.c"
+  ],
+  "support-targets": [
+    "native"
+  ]
+}
