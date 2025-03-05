@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 import subprocess
 
+
 def generate_binding(path: Path):
     if not path.exists():
         raise FileNotFoundError(f"{path} does not exist")
@@ -13,7 +14,7 @@ def generate_binding(path: Path):
         grammar_name = grammar["name"]
         grammar_path = grammar["path"]
         print(f"Generating binding for {grammar_name} at {grammar_path}")
-        grammar_path: Path = path /  "tree-sitter" / grammar_path
+        grammar_path: Path = path / "tree-sitter" / grammar_path
         parser_files: list[str] = []
         print(grammar_path.absolute())
         for parser_file in (grammar_path / "src").glob("*.c"):
@@ -21,19 +22,25 @@ def generate_binding(path: Path):
 
         moon_mod_json = {
             "name": f"tonyfettes/tree_sitter_{grammar_name}",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "deps": {
-                "tonyfettes/tree_sitter_language": "0.1.0",
+                "tonyfettes/tree_sitter_language": "0.1.1",
             },
+            "license": "Apache-2.0",
         }
-        (path / "moon.mod.json").write_text(json.dumps(moon_mod_json, indent=2))
+        (path / "moon.mod.json").write_text(json.dumps(moon_mod_json, indent=2) + "\n")
 
         moon_pkg_json = {
             "import": ["tonyfettes/tree_sitter_language"],
-            "native_stub": parser_files,
+            "native_stub": ["binding.c"],
             "support-targets": ["native"],
         }
-        (path / "moon.pkg.json").write_text(json.dumps(moon_pkg_json, indent=2))
+        (path / "moon.pkg.json").write_text(json.dumps(moon_pkg_json, indent=2) + "\n")
+
+        binding_c: list[str] = []
+        for file in parser_files:
+            binding_c.append(f'#include "{file}"')
+        (path / "binding.c").write_text("\n".join(binding_c + [""]))
 
         binding_mbt = f"""///|
 pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{grammar_name}"
