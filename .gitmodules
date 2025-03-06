@@ -7,3 +7,6 @@
 [submodule "markdown/tree-sitter"]
 	path = grammars/tree-sitter-markdown
 	url = https://github.com/tree-sitter-grammars/tree-sitter-markdown
+[submodule "grammars/tree-sitter-moonbit"]
+	path = grammars/tree-sitter-moonbit
+	url = https://github.com/moonbitlang/tree-sitter-moonbit
