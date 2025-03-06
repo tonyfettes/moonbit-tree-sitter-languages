@@ -18,9 +18,12 @@ def generate_binding(path: Path, bindings: Path):
         grammar_path = grammar["path"]
         print(f"Generating binding for {grammar_name} at {grammar_path}")
         grammar_path: Path = path / grammar_path
-        parser_files: list[str] = []
-        for parser_file in (grammar_path / "src").glob("*.c"):
-            parser_files.append(str(parser_file.relative_to(grammar_path / "src")))
+        c_sources: list[str] = []
+        all_sources: list[str] = []
+        for parser_file in (grammar_path / "src").iterdir():
+            if parser_file.suffix == ".c":
+                c_sources.append(str(parser_file.relative_to(grammar_path / "src")))
+            all_sources.append(str(parser_file.relative_to(grammar_path / "src")))
 
         binding_root: Path = (bindings / f"tree_sitter_{grammar_name}").resolve()
         print(f"Binding root: {binding_root}")
@@ -28,19 +31,16 @@ def generate_binding(path: Path, bindings: Path):
 
         shutil.copytree(grammar_path / "src", binding_root)
 
-        gitignore_content: list[str] = []
-        for parser_file in (grammar_path / "src").iterdir():
-            gitignore_content.append(str(parser_file.relative_to(grammar_path / "src")))
-        (binding_root / ".gitignore").write_text("\n".join(gitignore_content) + "\n")
+        (binding_root / ".gitignore").write_text("\n".join(all_sources) + "\n")
 
         moon_mod_json = {
             "name": f"tonyfettes/tree_sitter_{grammar_name}",
-            "version": "0.1.4",
+            "version": "0.1.5",
             "deps": {
                 "tonyfettes/tree_sitter_language": "0.1.1",
             },
             "license": "Apache-2.0",
-            "include": parser_files + [
+            "include": all_sources + [
                 "binding.mbt", "moon.pkg.json"
             ],
         }
@@ -50,7 +50,7 @@ def generate_binding(path: Path, bindings: Path):
 
         moon_pkg_json = {
             "import": ["tonyfettes/tree_sitter_language"],
-            "native_stub": parser_files,
+            "native_stub": c_sources,
             "support-targets": ["native"],
         }
         (binding_root / "moon.pkg.json").write_text(
