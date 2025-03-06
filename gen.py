@@ -36,6 +36,7 @@ def generate_binding(path: Path, bindings : Path):
                 "tonyfettes/tree_sitter_language": "0.1.1",
             },
             "license": "Apache-2.0",
+            "include": ["src"]
         }
         (binding_root / "moon.mod.json").write_text(json.dumps(moon_mod_json, indent=2) + "\n")
 
