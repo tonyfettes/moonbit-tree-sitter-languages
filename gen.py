@@ -4,7 +4,7 @@ import subprocess
 import shutil
 
 
-def generate_binding(path: Path, bindings : Path):
+def generate_binding(path: Path, bindings: Path):
     if not path.exists():
         raise FileNotFoundError(f"{path} does not exist")
 
@@ -19,7 +19,7 @@ def generate_binding(path: Path, bindings : Path):
         print(f"Generating binding for {grammar_name} at {grammar_path}")
         grammar_path: Path = path / grammar_path
         parser_files: list[str] = []
-        for parser_file in (grammar_path / "src").glob('*.c'):
+        for parser_file in (grammar_path / "src").glob("*.c"):
             parser_files.append(str(parser_file.relative_to(grammar_path)))
 
         binding_root: Path = (bindings / f"tree_sitter_{grammar_name}").resolve()
@@ -36,16 +36,20 @@ def generate_binding(path: Path, bindings : Path):
                 "tonyfettes/tree_sitter_language": "0.1.1",
             },
             "license": "Apache-2.0",
-            "include": ["src"]
+            "include": ["src", "binding.mbt", "moon.pkg.json"],
         }
-        (binding_root / "moon.mod.json").write_text(json.dumps(moon_mod_json, indent=2) + "\n")
+        (binding_root / "moon.mod.json").write_text(
+            json.dumps(moon_mod_json, indent=2) + "\n"
+        )
 
         moon_pkg_json = {
             "import": ["tonyfettes/tree_sitter_language"],
             "native_stub": parser_files,
             "support-targets": ["native"],
         }
-        (binding_root / "moon.pkg.json").write_text(json.dumps(moon_pkg_json, indent=2) + "\n")
+        (binding_root / "moon.pkg.json").write_text(
+            json.dumps(moon_pkg_json, indent=2) + "\n"
+        )
 
         binding_mbt = f"""///|
 pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{grammar_name}"
@@ -54,7 +58,9 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{g
 
         print(f"Building {grammar_name}")
 
-        subprocess.run(["moon", "build", "--target", "native"], cwd=binding_root, check=True)
+        subprocess.run(
+            ["moon", "build", "--target", "native"], cwd=binding_root, check=True
+        )
 
 
 def main():
