@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import subprocess
+import shutil
 
 
 def generate_binding(path: Path):
@@ -16,38 +17,40 @@ def generate_binding(path: Path):
         print(f"Generating binding for {grammar_name} at {grammar_path}")
         grammar_path: Path = path / "tree-sitter" / grammar_path
         parser_files: list[str] = []
-        print(grammar_path.absolute())
-        for parser_file in (grammar_path / "src").glob("*.c"):
-            parser_files.append(str(parser_file.relative_to(path)))
+        for parser_file in (grammar_path / "src").glob('*.c'):
+            parser_files.append(str(parser_file.relative_to(grammar_path)))
+
+        binding_root: Path = path / grammar_name
+        shutil.rmtree(binding_root, ignore_errors=True)
+        binding_root.mkdir(exist_ok=False)
+
+        shutil.copytree(grammar_path / "src", binding_root / "src")
 
         moon_mod_json = {
             "name": f"tonyfettes/tree_sitter_{grammar_name}",
-            "version": "0.1.1",
+            "version": "0.1.2g",
             "deps": {
                 "tonyfettes/tree_sitter_language": "0.1.1",
             },
             "license": "Apache-2.0",
         }
-        (path / "moon.mod.json").write_text(json.dumps(moon_mod_json, indent=2) + "\n")
+        (binding_root / "moon.mod.json").write_text(json.dumps(moon_mod_json, indent=2) + "\n")
 
         moon_pkg_json = {
             "import": ["tonyfettes/tree_sitter_language"],
-            "native_stub": ["binding.c"],
+            "native_stub": parser_files,
             "support-targets": ["native"],
         }
-        (path / "moon.pkg.json").write_text(json.dumps(moon_pkg_json, indent=2) + "\n")
-
-        binding_c: list[str] = []
-        for file in parser_files:
-            binding_c.append(f'#include "{file}"')
-        (path / "binding.c").write_text("\n".join(binding_c + [""]))
+        (binding_root / "moon.pkg.json").write_text(json.dumps(moon_pkg_json, indent=2) + "\n")
 
         binding_mbt = f"""///|
 pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{grammar_name}"
 """
-        (path / "binding.mbt").write_text(binding_mbt)
+        (binding_root / "binding.mbt").write_text(binding_mbt)
 
-        subprocess.run(["moon", "build", "--target", "native"], cwd=path)
+        print(f"Building {grammar_name}")
+
+        subprocess.run(["moon", "build", "--target", "native"], cwd=binding_root, check=True)
 
 
 def main():
