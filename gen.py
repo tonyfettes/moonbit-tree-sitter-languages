@@ -31,7 +31,7 @@ def generate_binding(path: Path, bindings: Path):
 
         moon_mod_json = {
             "name": f"tonyfettes/tree_sitter_{grammar_name}",
-            "version": "0.1.2",
+            "version": "0.1.3",
             "deps": {
                 "tonyfettes/tree_sitter_language": "0.1.1",
             },
