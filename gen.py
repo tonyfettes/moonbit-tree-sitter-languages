@@ -4,23 +4,26 @@ import subprocess
 import shutil
 
 
-def generate_binding(path: Path):
+def generate_binding(path: Path, bindings : Path):
     if not path.exists():
         raise FileNotFoundError(f"{path} does not exist")
 
-    tree_sitter_json_path = path / "tree-sitter" / "tree-sitter.json"
+    tree_sitter_json_path = path / "tree-sitter.json"
+    if not tree_sitter_json_path.exists():
+        raise FileNotFoundError(f"{tree_sitter_json_path} does not exist")
     tree_sitter_json = json.loads(tree_sitter_json_path.read_text())
     grammars = tree_sitter_json["grammars"]
     for grammar in grammars:
         grammar_name = grammar["name"]
         grammar_path = grammar["path"]
         print(f"Generating binding for {grammar_name} at {grammar_path}")
-        grammar_path: Path = path / "tree-sitter" / grammar_path
+        grammar_path: Path = path / grammar_path
         parser_files: list[str] = []
         for parser_file in (grammar_path / "src").glob('*.c'):
             parser_files.append(str(parser_file.relative_to(grammar_path)))
 
-        binding_root: Path = path / f"../tree_sitter_{grammar_name}"
+        binding_root: Path = (bindings / f"tree_sitter_{grammar_name}").resolve()
+        print(f"Binding root: {binding_root}")
         shutil.rmtree(binding_root, ignore_errors=True)
         binding_root.mkdir(exist_ok=False)
 
@@ -28,7 +31,7 @@ def generate_binding(path: Path):
 
         moon_mod_json = {
             "name": f"tonyfettes/tree_sitter_{grammar_name}",
-            "version": "0.1.2g",
+            "version": "0.1.2",
             "deps": {
                 "tonyfettes/tree_sitter_language": "0.1.1",
             },
@@ -58,8 +61,7 @@ def main():
         if not path.is_dir():
             continue
 
-        if (path / "tree-sitter").exists():
-            generate_binding(path)
+        generate_binding(path, Path("bindings"))
 
 
 if __name__ == "__main__":
