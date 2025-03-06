@@ -20,7 +20,7 @@ def generate_binding(path: Path):
         for parser_file in (grammar_path / "src").glob('*.c'):
             parser_files.append(str(parser_file.relative_to(grammar_path)))
 
-        binding_root: Path = path / grammar_name
+        binding_root: Path = path / f"../tree_sitter_{grammar_name}"
         shutil.rmtree(binding_root, ignore_errors=True)
         binding_root.mkdir(exist_ok=False)
 
@@ -54,7 +54,7 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{g
 
 
 def main():
-    for path in Path(".").iterdir():
+    for path in Path("grammars").iterdir():
         if not path.is_dir():
             continue
 

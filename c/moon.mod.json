@@ -1,8 +1,0 @@
-{
-  "name": "tonyfettes/tree_sitter_c",
-  "version": "0.1.1",
-  "deps": {
-    "tonyfettes/tree_sitter_language": "0.1.1"
-  },
-  "license": "Apache-2.0"
-}
