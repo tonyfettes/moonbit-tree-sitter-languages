@@ -1,0 +1,4 @@
+node-types.json
+tree_sitter
+grammar.json
+parser.c

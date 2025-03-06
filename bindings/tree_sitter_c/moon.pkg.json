@@ -3,7 +3,7 @@
     "tonyfettes/tree_sitter_language"
   ],
   "native_stub": [
-    "src/parser.c"
+    "parser.c"
   ],
   "support-targets": [
     "native"

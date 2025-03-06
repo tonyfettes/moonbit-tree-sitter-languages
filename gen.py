@@ -20,14 +20,18 @@ def generate_binding(path: Path, bindings: Path):
         grammar_path: Path = path / grammar_path
         parser_files: list[str] = []
         for parser_file in (grammar_path / "src").glob("*.c"):
-            parser_files.append(str(parser_file.relative_to(grammar_path)))
+            parser_files.append(str(parser_file.relative_to(grammar_path / "src")))
 
         binding_root: Path = (bindings / f"tree_sitter_{grammar_name}").resolve()
         print(f"Binding root: {binding_root}")
         shutil.rmtree(binding_root, ignore_errors=True)
-        binding_root.mkdir(exist_ok=False)
 
-        shutil.copytree(grammar_path / "src", binding_root / "src")
+        shutil.copytree(grammar_path / "src", binding_root)
+
+        gitignore_content: list[str] = []
+        for parser_file in (grammar_path / "src").iterdir():
+            gitignore_content.append(str(parser_file.relative_to(grammar_path / "src")))
+        (binding_root / ".gitignore").write_text("\n".join(gitignore_content) + "\n")
 
         moon_mod_json = {
             "name": f"tonyfettes/tree_sitter_{grammar_name}",
@@ -36,7 +40,9 @@ def generate_binding(path: Path, bindings: Path):
                 "tonyfettes/tree_sitter_language": "0.1.1",
             },
             "license": "Apache-2.0",
-            "include": ["src", "binding.mbt", "moon.pkg.json"],
+            "include": parser_files + [
+                "binding.mbt", "moon.pkg.json"
+            ],
         }
         (binding_root / "moon.mod.json").write_text(
             json.dumps(moon_mod_json, indent=2) + "\n"

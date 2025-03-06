@@ -6,7 +6,8 @@
   },
   "license": "Apache-2.0",
   "include": [
-    "src",
+    "scanner.c",
+    "parser.c",
     "binding.mbt",
     "moon.pkg.json"
   ]
