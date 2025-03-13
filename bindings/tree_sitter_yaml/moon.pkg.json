@@ -1,0 +1,14 @@
+{
+  "import": [
+    "tonyfettes/tree_sitter_language"
+  ],
+  "native_stub": [
+    "scanner.c",
+    "schema.json.c",
+    "schema.core.c",
+    "parser.c"
+  ],
+  "support-targets": [
+    "native"
+  ]
+}
