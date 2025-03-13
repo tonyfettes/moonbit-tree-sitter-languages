@@ -10,3 +10,6 @@
 [submodule "grammars/tree-sitter-moonbit"]
 	path = grammars/tree-sitter-moonbit
 	url = https://github.com/moonbitlang/tree-sitter-moonbit
+[submodule "grammars/tree-sitter-yaml"]
+	path = grammars/tree-sitter-yaml
+	url = https://github.com/tree-sitter-grammars/tree-sitter-yaml
