@@ -13,3 +13,6 @@
 [submodule "grammars/tree-sitter-yaml"]
 	path = grammars/tree-sitter-yaml
 	url = https://github.com/tree-sitter-grammars/tree-sitter-yaml
+[submodule "grammars/tree-sitter-query"]
+	path = grammars/tree-sitter-query
+	url = https://github.com/tree-sitter-grammars/tree-sitter-query
