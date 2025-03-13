@@ -15,7 +15,9 @@ def generate_binding(path: Path, bindings: Path):
     grammars = tree_sitter_json["grammars"]
     for grammar in grammars:
         grammar_name = grammar["name"]
-        grammar_path = grammar["path"]
+        grammar_path = "."
+        if "path" in grammar:
+            grammar_path = grammar["path"]
         print(f"Generating binding for {grammar_name} at {grammar_path}")
         grammar_path: Path = path / grammar_path
         c_sources: list[str] = []
