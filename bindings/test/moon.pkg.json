@@ -1,0 +1,18 @@
+{
+  "import": [
+    "tonyfettes/tree_sitter",
+    "tonyfettes/tree_sitter_moonbit",
+    "tonyfettes/tree_sitter_markdown_inline",
+    "tonyfettes/tree_sitter_markdown",
+    "tonyfettes/tree_sitter_yaml",
+    "tonyfettes/tree_sitter_javascript",
+    "tonyfettes/tree_sitter_json",
+    "tonyfettes/tree_sitter_query",
+    "tonyfettes/tree_sitter_c"
+  ],
+  "link": {
+    "native": {
+      "cc-flags": ""
+    }
+  }
+}
