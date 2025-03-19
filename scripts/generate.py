@@ -7,7 +7,7 @@ import os
 
 
 MOON_HOME = Path(os.getenv("MOON_HOME"))
-VERSION = "0.1.6"
+VERSION = "0.1.7"
 
 
 class Grammar:
@@ -72,14 +72,14 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{s
                 moon_mod_json = json.loads((destination / "moon.mod.json").read_text())
                 if "version" in moon_mod_json:
                     version = moon_mod_json["version"]
-                    if semver.compare(version, VERSION) < 0:
-                        version = VERSION
                     if "repository" in moon_mod_json:
                         repository = moon_mod_json["repository"]
                         if repository != self.repository:
                             version = semver.bump_patch(version)
                     else:
                         version = semver.bump_patch(version)
+                    if semver.compare(version, VERSION) < 0:
+                        version = VERSION
             shutil.rmtree(destination)
         print(f"Generating binding for {self.name} at {destination}, version {version}")
         shutil.copytree(self.path / "src", destination)
