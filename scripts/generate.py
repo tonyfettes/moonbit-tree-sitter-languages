@@ -4,10 +4,58 @@ import subprocess
 import shutil
 import semver
 import os
+import re
 
 
 MOON_HOME = Path(os.getenv("MOON_HOME"))
 VERSION = "0.1.7"
+
+
+include_directories = [
+    (Path(".") / "bindings" / "tinycc" / "include").absolute(),
+]
+
+
+def perform_c_include_to(path: Path):
+    print(f"Processing {path}")
+    system_include_pattern = re.compile(r"#\s*include\s+<([^>]+)>")
+    already_included: set[Path] = set()
+
+    def read_file(file: Path) -> list[str]:
+        return file.read_text().splitlines()
+
+    def try_include(include_path: str) -> list[str]:
+        for include_dir in include_directories:
+            include_file = include_dir / include_path
+            if include_file.exists():
+                if include_file in already_included:
+                    return []
+                print(f"Including {include_path}")
+                already_included.add(include_file)
+                return include_file.read_text().splitlines()
+        raise FileNotFoundError(f"Could not find include file {include_path}")
+
+    def process_file(lines: list[str]):
+        expanded_lines: list[str] = []
+        for line in lines:
+            match = system_include_pattern.match(line)
+            if match:
+                try:
+                    included_lines = try_include(match.group(1))
+                    expanded_lines.extend(
+                        ["#ifdef __TINYC__"]
+                        + process_file(included_lines)
+                        + ["#else", line, "#endif"]
+                    )
+                except FileNotFoundError:
+                    expanded_lines.append(line)
+            else:
+                expanded_lines.append(line)
+        return expanded_lines
+
+    original_lines = read_file(path)
+    expanded_lines = process_file(original_lines)
+    path.write_text("\n".join(expanded_lines))
 
 
 class Grammar:
@@ -63,9 +111,6 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{s
         destination.write_text(content)
 
     def generate_binding_to(self, destination: Path):
-        def bump_version(version):
-            return semver.bump_patch(version)
-
         version = VERSION
         if destination.exists():
             if (destination / "moon.mod.json").exists():
@@ -83,6 +128,8 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{s
             shutil.rmtree(destination)
         print(f"Generating binding for {self.name} at {destination}, version {version}")
         shutil.copytree(self.path / "src", destination)
+        for file in destination.rglob("*.h"):
+            perform_c_include_to(file)
         self.generate_gitignore_to(destination / ".gitignore")
         self.generate_moon_mod_json_to(destination / "moon.mod.json", version)
         self.generate_moon_pkg_json_to(destination / "moon.pkg.json")
