@@ -130,6 +130,8 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{s
         shutil.copytree(self.path / "src", destination)
         for file in destination.rglob("*.h"):
             perform_c_include_to(file)
+        for file in destination.rglob("*.c"):
+            perform_c_include_to(file)
         self.generate_gitignore_to(destination / ".gitignore")
         self.generate_moon_mod_json_to(destination / "moon.mod.json", version)
         self.generate_moon_pkg_json_to(destination / "moon.pkg.json")
