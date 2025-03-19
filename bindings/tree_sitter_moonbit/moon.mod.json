@@ -1,9 +1,10 @@
 {
   "name": "tonyfettes/tree_sitter_moonbit",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "deps": {
     "tonyfettes/tree_sitter_language": "0.1.1"
   },
+  "repository": "https://github.com/moonbitlang/tree-sitter-moonbit#0fe2b99c80451587c8be7742122901a90a5da2c4",
   "license": "Apache-2.0",
   "include": [
     "scanner.c",

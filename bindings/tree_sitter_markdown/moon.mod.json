@@ -1,9 +1,10 @@
 {
   "name": "tonyfettes/tree_sitter_markdown",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "deps": {
     "tonyfettes/tree_sitter_language": "0.1.1"
   },
+  "repository": "https://github.com/tree-sitter-grammars/tree-sitter-markdown#192407ab5a24bfc24f13332979b5e7967518754a",
   "license": "Apache-2.0",
   "include": [
     "scanner.c",

@@ -1,9 +1,10 @@
 {
   "name": "tonyfettes/tree_sitter_query",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "deps": {
     "tonyfettes/tree_sitter_language": "0.1.1"
   },
+  "repository": "https://github.com/tree-sitter-grammars/tree-sitter-query#0555ac0da902abff06076e40501102cee3ba68bd",
   "license": "Apache-2.0",
   "include": [
     "node-types.json",
