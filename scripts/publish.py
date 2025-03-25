@@ -10,7 +10,10 @@ def main():
             continue
         if not binding.name.startswith("tree_sitter_"):
             continue
-        subprocess.run(["moon", "publish"], cwd=binding, check=True)
+        try:
+            subprocess.run(["moon", "publish"], cwd=binding, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to publish {binding}: {e}")
 
 
 if __name__ == "__main__":
