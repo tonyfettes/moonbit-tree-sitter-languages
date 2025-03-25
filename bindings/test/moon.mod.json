@@ -2,17 +2,8 @@
   "name": "tonyfettes/tree_sitter_language/test",
   "version": "0.1.0",
   "deps": {
-    "tonyfettes/tree_sitter_moonbit": {
-      "path": "../tree_sitter_moonbit"
-    },
-    "tonyfettes/tree_sitter_markdown_inline": {
-      "path": "../tree_sitter_markdown_inline"
-    },
-    "tonyfettes/tree_sitter_markdown": {
-      "path": "../tree_sitter_markdown"
-    },
-    "tonyfettes/tree_sitter_yaml": {
-      "path": "../tree_sitter_yaml"
+    "tonyfettes/tree_sitter_c": {
+      "path": "../tree_sitter_c"
     },
     "tonyfettes/tree_sitter_javascript": {
       "path": "../tree_sitter_javascript"
@@ -20,11 +11,20 @@
     "tonyfettes/tree_sitter_json": {
       "path": "../tree_sitter_json"
     },
+    "tonyfettes/tree_sitter_markdown": {
+      "path": "../tree_sitter_markdown"
+    },
+    "tonyfettes/tree_sitter_markdown_inline": {
+      "path": "../tree_sitter_markdown_inline"
+    },
+    "tonyfettes/tree_sitter_moonbit": {
+      "path": "../tree_sitter_moonbit"
+    },
     "tonyfettes/tree_sitter_query": {
       "path": "../tree_sitter_query"
     },
-    "tonyfettes/tree_sitter_c": {
-      "path": "../tree_sitter_c"
+    "tonyfettes/tree_sitter_yaml": {
+      "path": "../tree_sitter_yaml"
     },
     "tonyfettes/tree_sitter": "0.1.12"
   }

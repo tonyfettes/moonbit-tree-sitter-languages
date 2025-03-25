@@ -73,6 +73,7 @@ def main():
                 path=item,
             )
         )
+    grammars.sort(key=lambda grammar: grammar.name)
     generate_test_module(grammars, bindings / "test")
 
 
