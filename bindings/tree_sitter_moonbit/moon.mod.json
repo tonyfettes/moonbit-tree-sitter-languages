@@ -1,17 +1,17 @@
 {
   "name": "tonyfettes/tree_sitter_moonbit",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "deps": {
     "tonyfettes/tree_sitter_language": "0.1.1"
   },
-  "repository": "https://github.com/moonbitlang/tree-sitter-moonbit#0fe2b99c80451587c8be7742122901a90a5da2c4",
+  "repository": "https://github.com/moonbitlang/tree-sitter-moonbit#+8c17b59f16adaf87813972df0cbf193825825f47",
   "license": "Apache-2.0",
   "include": [
-    "scanner.c",
-    "node-types.json",
-    "tree_sitter",
     "grammar.json",
+    "node-types.json",
     "parser.c",
+    "scanner.c",
+    "tree_sitter",
     "binding.mbt",
     "moon.pkg.json"
   ]

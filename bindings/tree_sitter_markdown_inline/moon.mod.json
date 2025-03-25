@@ -1,17 +1,17 @@
 {
   "name": "tonyfettes/tree_sitter_markdown_inline",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "deps": {
     "tonyfettes/tree_sitter_language": "0.1.1"
   },
-  "repository": "https://github.com/tree-sitter-grammars/tree-sitter-markdown#192407ab5a24bfc24f13332979b5e7967518754a",
+  "repository": "https://github.com/tree-sitter-grammars/tree-sitter-markdown#+413285231ce8fa8b11e7074bbe265b48aa7277f9",
   "license": "Apache-2.0",
   "include": [
-    "scanner.c",
-    "node-types.json",
-    "tree_sitter",
     "grammar.json",
+    "node-types.json",
     "parser.c",
+    "scanner.c",
+    "tree_sitter",
     "binding.mbt",
     "moon.pkg.json"
   ]

@@ -7,10 +7,10 @@
   "repository": "https://github.com/tree-sitter-grammars/tree-sitter-query#930202c2a80965a7a9ca018b5b2a08b25dfa7f12",
   "license": "Apache-2.0",
   "include": [
-    "node-types.json",
-    "tree_sitter",
     "grammar.json",
+    "node-types.json",
     "parser.c",
+    "tree_sitter",
     "binding.mbt",
     "moon.pkg.json"
   ]

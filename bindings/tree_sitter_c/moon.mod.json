@@ -7,10 +7,10 @@
   "repository": "https://github.com/tree-sitter/tree-sitter-c.git#2a265d69a4caf57108a73ad2ed1e6922dd2f998c",
   "license": "Apache-2.0",
   "include": [
-    "node-types.json",
-    "tree_sitter",
     "grammar.json",
+    "node-types.json",
     "parser.c",
+    "tree_sitter",
     "binding.mbt",
     "moon.pkg.json"
   ]

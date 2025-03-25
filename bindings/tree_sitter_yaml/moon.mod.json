@@ -7,13 +7,13 @@
   "repository": "https://github.com/tree-sitter-grammars/tree-sitter-yaml#1805917414a9a8ba2473717fd69447277a175fae",
   "license": "Apache-2.0",
   "include": [
-    "scanner.c",
-    "schema.json.c",
-    "node-types.json",
-    "schema.core.c",
-    "tree_sitter",
     "grammar.json",
+    "node-types.json",
     "parser.c",
+    "scanner.c",
+    "schema.core.c",
+    "schema.json.c",
+    "tree_sitter",
     "binding.mbt",
     "moon.pkg.json"
   ]

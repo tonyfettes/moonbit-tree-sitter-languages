@@ -3,10 +3,10 @@
     "tonyfettes/tree_sitter_language"
   ],
   "native_stub": [
+    "parser.c",
     "scanner.c",
-    "schema.json.c",
     "schema.core.c",
-    "parser.c"
+    "schema.json.c"
   ],
   "support-targets": [
     "native"
