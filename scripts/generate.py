@@ -78,6 +78,8 @@ class Grammar:
             if file.suffix == ".c":
                 self.stubs.append(str(file.relative_to(src_path)))
             self.files.append(str(file.relative_to(src_path)))
+        self.stubs.sort()
+        self.files.sort()
 
     def generate_gitignore_to(self, destination: Path):
         content = "\n".join(self.files) + "\n"
