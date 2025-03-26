@@ -2,6 +2,7 @@
   "import": [
     "tonyfettes/tree_sitter",
     "tonyfettes/tree_sitter_c",
+    "tonyfettes/tree_sitter_go",
     "tonyfettes/tree_sitter_javascript",
     "tonyfettes/tree_sitter_json",
     "tonyfettes/tree_sitter_markdown",

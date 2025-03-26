@@ -8,6 +8,13 @@ test "can_load_grammar" {
 ///|
 test "can_load_grammar" {
   let parser = @tree_sitter.Parser::new()
+  let language = @tree_sitter_go.language()
+  parser.set_language(language)
+}
+
+///|
+test "can_load_grammar" {
+  let parser = @tree_sitter.Parser::new()
   let language = @tree_sitter_javascript.language()
   parser.set_language(language)
 }
