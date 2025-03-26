@@ -43,6 +43,9 @@ def generate_test_module(grammars: list[Grammar], destination: Path):
         json.dumps(moon_pkg_json, indent=2) + "\n"
     )
     subprocess.run(["moon", "add", "tonyfettes/tree_sitter"], cwd=destination, check=True)
+    (destination / "moon.mod.json").write_text(
+        (destination / "moon.mod.json").read_text() + "\n"
+    )
     tests = []
     for grammar in grammars:
         tests.append(
