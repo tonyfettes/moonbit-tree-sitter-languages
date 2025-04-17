@@ -101,6 +101,7 @@ class Grammar:
     def generate_moon_pkg_json_to(self, destination: Path):
         moon_pkg_json = {
             "import": ["tonyfettes/tree_sitter_language"],
+            "targets": {"binding.mbt": ["native"]},
             "native_stub": self.stubs,
             "support-targets": ["native"],
         }
