@@ -2,6 +2,11 @@
   "import": [
     "tonyfettes/tree_sitter_language"
   ],
+  "targets": {
+    "binding.mbt": [
+      "native"
+    ]
+  },
   "native_stub": [
     "parser.c"
   ],

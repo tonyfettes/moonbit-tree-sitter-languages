@@ -8,7 +8,7 @@ import re
 
 
 MOON_HOME = Path(os.getenv("MOON_HOME"))
-VERSION = "0.1.7"
+VERSION = "0.1.12"
 
 
 include_directories = [
