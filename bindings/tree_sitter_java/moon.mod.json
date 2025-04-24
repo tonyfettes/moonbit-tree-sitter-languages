@@ -1,0 +1,17 @@
+{
+  "name": "tonyfettes/tree_sitter_java",
+  "version": "0.1.12",
+  "deps": {
+    "tonyfettes/tree_sitter_language": "0.1.1"
+  },
+  "repository": "https://github.com/tree-sitter/tree-sitter-java#a7db5227ec40fcfe94489559d8c9bc7c8181e25a",
+  "license": "Apache-2.0",
+  "include": [
+    "grammar.json",
+    "node-types.json",
+    "parser.c",
+    "tree_sitter",
+    "binding.mbt",
+    "moon.pkg.json"
+  ]
+}
