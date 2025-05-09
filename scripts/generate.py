@@ -9,7 +9,7 @@ import argparse
 
 
 MOON_HOME = Path(os.getenv("MOON_HOME"))
-VERSION = "0.1.12"
+VERSION = "0.1.15"
 
 
 include_directories = [
@@ -80,7 +80,7 @@ class Grammar:
         content = "\n".join(self.files) + "\n"
         destination.write_text(content)
 
-    def generate_moon_mod_json_to(self, destination: Path, version: str):
+    def generate_moon_mod_json_to(self, destination: Path, version: str, wasm: str):
         moon_mod_json = {
             "name": f"tonyfettes/tree_sitter_{self.name}",
             "version": version,
@@ -89,7 +89,7 @@ class Grammar:
             },
             "repository": self.metadata.repository,
             "license": "Apache-2.0",
-            "include": self.files + ["binding.mbt", "moon.pkg.json"],
+            "include": self.files + ["binding.mbt", "moon.pkg.json", wasm],
         }
         destination.write_text(json.dumps(moon_mod_json, indent=2) + "\n")
 
@@ -203,12 +203,12 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "{function_name
             self.perform_c_include_to(
                 destination, file.relative_to(destination), relocations
             )
-        self.generate_gitignore_to(destination / ".gitignore")
-        self.generate_moon_mod_json_to(destination / "moon.mod.json", version)
-        self.generate_moon_pkg_json_to(destination / "moon.pkg.json")
         wasm_path = self.build_wasm()
         shutil.copyfile(wasm_path, destination / wasm_path.name)
         self.generate_binding_native_mbt_to(destination / "parser.c", destination / "binding.mbt")
+        self.generate_gitignore_to(destination / ".gitignore")
+        self.generate_moon_mod_json_to(destination / "moon.mod.json", version, wasm=wasm_path.name)
+        self.generate_moon_pkg_json_to(destination / "moon.pkg.json")
 
 
 def git_submodule_url(path: Path) -> str:
