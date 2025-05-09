@@ -1,10 +1,10 @@
 {
   "name": "tonyfettes/tree_sitter_yaml",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "deps": {
     "tonyfettes/tree_sitter_language": "0.1.1"
   },
-  "repository": "https://github.com/tree-sitter-grammars/tree-sitter-yaml#1805917414a9a8ba2473717fd69447277a175fae",
+  "repository": "https://github.com/tree-sitter-grammars/tree-sitter-yaml",
   "license": "Apache-2.0",
   "include": [
     "grammar.json",

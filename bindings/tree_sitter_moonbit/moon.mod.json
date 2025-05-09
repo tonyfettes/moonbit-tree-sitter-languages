@@ -1,10 +1,10 @@
 {
   "name": "tonyfettes/tree_sitter_moonbit",
-  "version": "0.1.12",
+  "version": "0.1.14",
   "deps": {
     "tonyfettes/tree_sitter_language": "0.1.1"
   },
-  "repository": "https://github.com/moonbitlang/tree-sitter-moonbit#290094725390a4e5f4fdb0524d1be037016890ba",
+  "repository": "https://github.com/moonbitlang/tree-sitter-moonbit",
   "license": "Apache-2.0",
   "include": [
     "grammar.json",
