@@ -1,6 +1,6 @@
 {
   "name": "tonyfettes/tree_sitter_yaml",
-  "version": "0.1.13",
+  "version": "0.1.15",
   "deps": {
     "tonyfettes/tree_sitter_language": "0.1.1"
   },
@@ -15,6 +15,7 @@
     "schema.json.c",
     "tree_sitter",
     "binding.mbt",
-    "moon.pkg.json"
+    "moon.pkg.json",
+    "tree-sitter-yaml.wasm"
   ]
 }
