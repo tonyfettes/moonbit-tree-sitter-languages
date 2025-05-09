@@ -102,9 +102,14 @@ class Grammar:
         }
         destination.write_text(json.dumps(moon_pkg_json, indent=2) + "\n")
 
-    def generate_binding_native_mbt_to(self, destination: Path):
+    def generate_binding_native_mbt_to(self, parser: Path, destination: Path):
+        print(f"parsing function name from {parser}")
+        function_name_regex = re.compile(r"TS_PUBLIC\s+const\s+TSLanguage\s*\*\s*(\w+)\(void\)\s+")
+        parser_source = parser.read_text()
+        function_name_match = function_name_regex.search(parser_source)
+        function_name = function_name_match.group(1)
         content = f"""///|
-pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{self.name}"
+pub extern "c" fn language() -> @tree_sitter_language.Language = "{function_name}"
 """
         destination.write_text(content)
 
@@ -201,9 +206,9 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "tree_sitter_{s
         self.generate_gitignore_to(destination / ".gitignore")
         self.generate_moon_mod_json_to(destination / "moon.mod.json", version)
         self.generate_moon_pkg_json_to(destination / "moon.pkg.json")
-        self.generate_binding_native_mbt_to(destination / "binding.mbt")
         wasm_path = self.build_wasm()
         shutil.copyfile(wasm_path, destination / wasm_path.name)
+        self.generate_binding_native_mbt_to(destination / "parser.c", destination / "binding.mbt")
 
 
 def git_submodule_url(path: Path) -> str:
@@ -280,7 +285,7 @@ def generate_binding(project: Path, bindings: Path):
             metadata=metadata,
         )
         binding_root: Path = (bindings / f"tree_sitter_{grammar_name}").resolve()
-
+        print("generating binding for", grammar_name)
         grammar_dict.generate_binding_to(binding_root)
 
         subprocess.run(
