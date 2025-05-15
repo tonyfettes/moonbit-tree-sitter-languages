@@ -6,6 +6,15 @@ import semver
 import os
 import re
 import argparse
+import concurrent.futures
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
 
 
 MOON_HOME = Path(os.getenv("MOON_HOME"))
@@ -106,7 +115,7 @@ class Grammar:
         destination.write_text(json.dumps(moon_pkg_json, indent=2) + "\n")
 
     def generate_binding_native_mbt_to(self, parser: Path, destination: Path):
-        print(f"parsing function name from {parser}")
+        logger.info(f"Parsing function name from {parser}")
         function_name_regex = re.compile(
             r"TS_PUBLIC\s+const\s+TSLanguage\s*\*\s*(\w+)\(void\)\s+"
         )
@@ -297,7 +306,7 @@ def generate_binding(project: Path, bindings: Path):
             metadata=metadata,
         )
         binding_root: Path = (bindings / f"tree_sitter_{grammar_name}").resolve()
-        print("generating binding for", grammar_name)
+        logger.info(f"Generating binding for {grammar_name}")
         grammar_dict.generate_binding_to(binding_root)
 
         subprocess.run(
@@ -316,15 +325,40 @@ def main():
         default=None,
         help="Path to the grammars directory",
     )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=os.cpu_count(),
+        help="Number of worker threads to use (default: number of CPU cores)",
+    )
     args = parser.parse_args()
-    if args.path:
-        generate_binding(args.path, Path("bindings"))
-    else:
-        for path in Path("grammars").iterdir():
-            if not path.is_dir():
-                continue
 
-            generate_binding(path, Path("bindings"))
+    # Create a thread pool executor
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
+        if args.path:
+            # Single grammar case
+            future = executor.submit(generate_binding, args.path, Path("bindings"))
+            try:
+                future.result()  # Wait for completion and propagate any exceptions
+            except Exception as e:
+                logger.error(f"Error generating binding for {args.path}: {e}")
+        else:
+            # Multiple grammars case
+            futures = []
+            for path in Path("grammars").iterdir():
+                if not path.is_dir():
+                    continue
+
+                # Submit each grammar to the thread pool
+                future = executor.submit(generate_binding, path, Path("bindings"))
+                futures.append((path, future))
+
+            # Wait for all futures to complete and handle any exceptions
+            for path, future in futures:
+                try:
+                    future.result()
+                except Exception as e:
+                    logger.error(f"Error generating binding for {path}: {e}")
 
 
 if __name__ == "__main__":
