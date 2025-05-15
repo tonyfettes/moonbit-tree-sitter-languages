@@ -72,7 +72,10 @@ class Grammar:
         self.external_files = external_files
         self.file_types = file_types
 
-    def build_wasm(self):
+    def tree_sitter_generate(self):
+        subprocess.run(["tree-sitter", "generate"], cwd=self.path, check=True)
+
+    def tree_sitter_build_wasm(self):
         subprocess.run(["tree-sitter", "build", "--wasm"], cwd=self.path, check=True)
         return list(self.path.glob("*.wasm"))[0]
 
@@ -104,7 +107,9 @@ class Grammar:
 
     def generate_binding_native_mbt_to(self, parser: Path, destination: Path):
         print(f"parsing function name from {parser}")
-        function_name_regex = re.compile(r"TS_PUBLIC\s+const\s+TSLanguage\s*\*\s*(\w+)\(void\)\s+")
+        function_name_regex = re.compile(
+            r"TS_PUBLIC\s+const\s+TSLanguage\s*\*\s*(\w+)\(void\)\s+"
+        )
         parser_source = parser.read_text()
         function_name_match = function_name_regex.search(parser_source)
         function_name = function_name_match.group(1)
@@ -175,6 +180,7 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "{function_name
         (destination / file).write_text("\n".join(expanded_lines))
 
     def generate_binding_to(self, destination: Path):
+        self.tree_sitter_generate()
         version = VERSION
         if destination.exists():
             if (destination / "moon.mod.json").exists():
@@ -203,11 +209,15 @@ pub extern "c" fn language() -> @tree_sitter_language.Language = "{function_name
             self.perform_c_include_to(
                 destination, file.relative_to(destination), relocations
             )
-        wasm_path = self.build_wasm()
+        wasm_path = self.tree_sitter_build_wasm()
         shutil.copyfile(wasm_path, destination / wasm_path.name)
-        self.generate_binding_native_mbt_to(destination / "parser.c", destination / "binding.mbt")
+        self.generate_binding_native_mbt_to(
+            destination / "parser.c", destination / "binding.mbt"
+        )
         self.generate_gitignore_to(destination / ".gitignore")
-        self.generate_moon_mod_json_to(destination / "moon.mod.json", version, wasm=wasm_path.name)
+        self.generate_moon_mod_json_to(
+            destination / "moon.mod.json", version, wasm=wasm_path.name
+        )
         self.generate_moon_pkg_json_to(destination / "moon.pkg.json")
 
 
@@ -247,6 +257,8 @@ def generate_binding(project: Path, bindings: Path):
     tree_sitter_path = project / "tree-sitter.json"
     if not tree_sitter_path.exists():
         raise FileNotFoundError(f"{tree_sitter_path} does not exist")
+    if (project / "package.json").exists():
+        subprocess.run(["npm", "install"], cwd=project, check=True, capture_output=True)
     tree_sitter_dict = json.loads(tree_sitter_path.read_text())
     metadata_dict = tree_sitter_dict["metadata"]
     metadata_links_dict = metadata_dict["links"]
