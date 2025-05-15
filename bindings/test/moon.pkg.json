@@ -4,6 +4,7 @@
     "tonyfettes/tree_sitter_c",
     "tonyfettes/tree_sitter_cpp",
     "tonyfettes/tree_sitter_css",
+    "tonyfettes/tree_sitter_flow",
     "tonyfettes/tree_sitter_go",
     "tonyfettes/tree_sitter_html",
     "tonyfettes/tree_sitter_java",

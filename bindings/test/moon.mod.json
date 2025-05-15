@@ -11,6 +11,9 @@
     "tonyfettes/tree_sitter_css": {
       "path": "../tree_sitter_css"
     },
+    "tonyfettes/tree_sitter_flow": {
+      "path": "../tree_sitter_flow"
+    },
     "tonyfettes/tree_sitter_go": {
       "path": "../tree_sitter_go"
     },
@@ -62,6 +65,6 @@
     "tonyfettes/tree_sitter_yaml": {
       "path": "../tree_sitter_yaml"
     },
-    "tonyfettes/tree_sitter": "0.2.0"
+    "tonyfettes/tree_sitter": "0.2.1"
   }
 }

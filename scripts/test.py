@@ -50,7 +50,7 @@ def generate_test_module(grammars: list[Grammar], destination: Path):
     for grammar in grammars:
         tests.append(
             f"""///|
-test "can_load_grammar" {{
+test "{grammar.name}" {{
     let parser = @tree_sitter.Parser::new()
     let language = @tree_sitter_{grammar.name}.language()
     parser.set_language(language)
@@ -59,7 +59,7 @@ test "can_load_grammar" {{
         )
     (destination / "test.mbt").write_text("\n".join(tests))
     subprocess.run(["moon", "fmt"], cwd=destination, check=True)
-    subprocess.run(["moon", "test", "--target", "native"], cwd=destination, check=True)
+    subprocess.run(["moon", "test", "--target", "native", "-v"], cwd=destination, check=True)
 
 
 def main():
